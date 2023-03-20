@@ -1,16 +1,22 @@
-export const App = () => {
+import { Component } from 'react';
+import ImageGallery from "./ImageGallery/ImageGallery";
+import Searchbar from "./Searchbar/Searchbar";
+
+export class App extends Component {
+  state = {
+    serachValue: '',
+  };
+
+  submitSearch = ({ serachValue }) => {
+    this.setState({serachValue})
+  }
+
+render() {
   return (
-    <div
-      style={{
-        height: '100vh',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        fontSize: 40,
-        color: '#010101'
-      }}
-    >
-      React homework template
-    </div>
-  );
-};
+      <>
+      <Searchbar onSubmit={this.submitSearch}/>
+      <ImageGallery serachValue={this.state}/> 
+      </>
+  )}
+}
+
