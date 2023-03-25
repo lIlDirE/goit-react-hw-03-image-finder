@@ -4,18 +4,18 @@ import Searchbar from "./Searchbar/Searchbar";
 
 export class App extends Component {
   state = {
-    serachValue: '',
+    searchValue: '',
   };
 
-  submitSearch = ({ serachValue }) => {
-    this.setState({serachValue})
+  submitSearch = ({ searchValue }) => {
+    this.setState({searchValue})
   }
 
 render() {
   return (
       <>
       <Searchbar onSubmit={this.submitSearch}/>
-      <ImageGallery serachValue={this.state}/> 
+	  <ImageGallery searchValue={this.state}/> 
       </>
   )}
 }

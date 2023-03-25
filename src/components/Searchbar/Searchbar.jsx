@@ -3,11 +3,11 @@ import css from './Searchbar.module.css';
 
 class Searchbar extends Component {
   state = {
-    serachValue: '',
+    searchValue: '',
   };
 
   handleSearch = e => {
-    this.setState({serachValue: e.target.value})
+    this.setState({searchValue: e.target.value})
   }
 
   handleSubmit = (e) => {
@@ -24,6 +24,7 @@ class Searchbar extends Component {
           </button>
           <input
             onChange={this.handleSearch}
+			value={this.state.searchValue}
             className={css.SearchFormInput}
             type="text"
             autoComplete="off"
