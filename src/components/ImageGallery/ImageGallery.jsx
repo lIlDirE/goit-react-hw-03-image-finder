@@ -11,7 +11,6 @@ class ImageGallery extends Component {
   state = {
     dataImages: [],
     page: 1,
-    newPage: 1,
     loadHits: 0,
     toggleLoader: false,
     toggleButton: false,
@@ -22,19 +21,19 @@ class ImageGallery extends Component {
 
   async componentDidUpdate(prevProps, prevState) {
     const searchValue = this.props.searchValue.searchValue;
-    const { page, newPage } = this.state;
+    const { page } = this.state;
     if (searchValue === '') {
       return Notiflix.Notify.failure('Please add the any searched word!');
     } else if (searchValue !== prevProps.searchValue.searchValue) {
       this.setState({ dataImages: [] });
-      this.getInfo({ searchValue, newPage });
+      this.getInfo({ searchValue });
     } else if (page !== prevState.page) {
       this.getInfo({ searchValue, page });
     }
   }
 
   getInfo = ({ searchValue, page }) => {
-	this.setState({toggleLoader: true})
+    this.setState({ toggleLoader: true });
     ReturnFetch(searchValue, page)
       .then(data => {
         if (!data.total) {
@@ -65,22 +64,21 @@ class ImageGallery extends Component {
     this.setState({
       largeImageUrl: e.largeImageURL,
       largeImageAlt: e.tags,
-	  isActive: true,
-    }) 
+      isActive: true,
+    });
   };
 
-  closeModal = () =>  {
-	this.setState({
-		isActive: false,
-	  }) 
-  }
+  closeModal = () => {
+    this.setState({
+      isActive: false,
+    });
+  };
 
   render() {
     const {
       dataImages,
       toggleLoader,
-      page,
-	  newPage,
+      loadHits,
       isActive,
       largeImageUrl,
       largeImageAlt,
@@ -88,20 +86,18 @@ class ImageGallery extends Component {
 
     return (
       <>
-        <div>
-			{toggleLoader && (
-				<Loader />
-			)}
+        {dataImages[0] && (
           <ul className={css.galleryList}>
             <ImageGalleryItem
               images={dataImages}
               toggleModal={this.toggleModal}
             />
           </ul>
-        </div>
-		{((dataImages.length / page && dataImages.length / newPage) === 12)&&(
-		 <Button onLoadMore={this.onLoadMore} toggleLoader={toggleLoader} />
-		)}
+        )}
+        {toggleLoader && <Loader />}
+        {loadHits === 12 && (
+          <Button onLoadMore={this.onLoadMore} toggleLoader={toggleLoader} />
+        )}
         {isActive && (
           <Modal
             url={largeImageUrl}
