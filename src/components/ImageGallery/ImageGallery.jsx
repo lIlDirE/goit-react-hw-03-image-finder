@@ -28,20 +28,21 @@ class ImageGallery extends Component {
 	const prevPage = prevState.page
 
     if (searchValue === '') {
-      return Notiflix.Notify.failure('Please add the any searched word!');
-    }   
-	 else if (prevValue !== searchValue && prevPage > 1) {
-		 this.setState({
+		return Notiflix.Notify.failure('Please add the any searched word!');
+	  } else if (prevValue !== searchValue) {
+		this.setState({
 		  dataImages: [],
 		  page: 1,
 		});
-
-		return this.getInfo({searchValue,page});
-	  } else if ((prevPage !== page && page > 1) || (searchValue !== prevValue)) {
-  
-		this.getInfo({searchValue,page});
+		if (page === 1) {
+		  this.getInfo({ searchValue, page });
+		  return;
+		}
 	  }
-  }
+	  if (prevPage !== page) {
+		this.getInfo({ searchValue, page });
+	  }
+	}
 
   getInfo = ({searchValue,page}) => {
 	console.log(page);
