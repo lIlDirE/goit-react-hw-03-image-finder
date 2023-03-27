@@ -11,6 +11,7 @@ class ImageGallery extends Component {
   state = {
     dataImages: [],
     page: 1,
+	newPage: 1,
     loadHits: 0,
     toggleLoader: false,
     toggleButton: false,
@@ -20,19 +21,30 @@ class ImageGallery extends Component {
   };
 
   async componentDidUpdate(prevProps, prevState) {
-    const searchValue = this.props.searchValue.searchValue;
-    const { page } = this.state;
+	 const { page } = this.state
+
+	const searchValue = this.props.searchValue.searchValue;
+	const prevValue = prevProps.searchValue.searchValue
+	const prevPage = prevState.page
+
     if (searchValue === '') {
       return Notiflix.Notify.failure('Please add the any searched word!');
-    } else if (searchValue !== prevProps.searchValue.searchValue) {
-      this.setState({ dataImages: [] });
-      this.getInfo({ searchValue });
-    } else if (page !== prevState.page) {
-      this.getInfo({ searchValue, page });
-    }
+    }   
+	 else if (prevValue !== searchValue && prevPage > 1) {
+		 this.setState({
+		  dataImages: [],
+		  page: 1,
+		});
+
+		return this.getInfo({searchValue,page});
+	  } else if ((prevPage !== page && page > 1) || (searchValue !== prevValue)) {
+  
+		this.getInfo({searchValue,page});
+	  }
   }
 
-  getInfo = ({ searchValue, page }) => {
+  getInfo = ({searchValue,page}) => {
+	console.log(page);
     this.setState({ toggleLoader: true });
     ReturnFetch(searchValue, page)
       .then(data => {
